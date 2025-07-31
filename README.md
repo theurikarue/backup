@@ -4,7 +4,7 @@
 1. Clone the repository:
     ```bash
     git clone https://github.com/theurikarue/backup.git
-    cd 
+    cd backup
     ```
 
 2. Install live-server:
