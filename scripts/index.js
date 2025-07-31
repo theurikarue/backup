@@ -1,8 +1,8 @@
  
         // API Configuration
         const API_CONFIG = {
-            LOGIN_URL: 'https://assetishaport.counterone.net/api/dev2/accounts/clients/login',
-            VERIFY_OTP_URL: 'https://assetishaport.counterone.net/api/dev2/accounts/verifyotp',
+            LOGIN_URL: ' https://api.example.com/login',
+            VERIFY_OTP_URL: 'https://api.example.com/verify-otp',
             DASHBOARD_URL: 'dashboard.html'
         };
 

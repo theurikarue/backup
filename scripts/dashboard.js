@@ -1,7 +1,7 @@
 
         // API Configuration
         const API_CONFIG = {
-            BACKUP_SERVICES_API: 'http://173.249.30.121:9000/core/api/',
+            BACKUP_SERVICES_API: 'https://api.example.com/backup-services/',
             LOGIN_URL: 'index.html'
         };
 
