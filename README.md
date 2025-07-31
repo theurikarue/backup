@@ -1,6 +1,4 @@
 # Back-up feature
-# UniVerse Alumni Mapping Project
-
 
 ## Installation
 1. Clone the repository:
