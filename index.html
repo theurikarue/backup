@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BackupVault - Login</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #2d5a27 0%, #4a7c59 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-container {
+            background: white;
+            border-radius: 20px;
+            padding: 60px 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 600px;
+            width: 100%;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .login-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.15);
+        }
+
+        .logo {
+            font-size: 2.5em;
+            color: #2d5a27;
+            margin-bottom: 10px;
+            font-weight: bold;
+            animation: fadeInDown 0.8s ease;
+        }
+
+        .tagline {
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 1.1em;
+            animation: fadeInUp 0.8s ease 0.2s both;
+        }
+
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 30px;
+            gap: 10px;
+        }
+
+        .step {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+        }
+
+        .step.active {
+            background: #2d5a27;
+            color: white;
+        }
+
+        .step.completed {
+            background: #4a7c59;
+            color: white;
+        }
+
+        .step-line {
+            width: 40px;
+            height: 2px;
+            background: #e0e0e0;
+            transition: all 0.3s ease;
+        }
+
+        .step-line.active {
+            background: #2d5a27;
+        }
+
+        .login-form {
+            animation: fadeInUp 0.8s ease 0.4s both;
+        }
+
+        .form-step {
+            display: none;
+        }
+
+        .form-step.active {
+            display: block;
+        }
+
+        .step-title {
+            font-size: 1.3em;
+            color: #2d5a27;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .step-description {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 0.95em;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        .input-group label {
+            position: absolute;
+            top: 50%;
+            left: 15px;
+            transform: translateY(-50%);
+            color: #999;
+            font-size: 0.9em;
+            pointer-events: none;
+            transition: all 0.3s ease;
+            background: white;
+            padding: 0 5px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 18px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #2d5a27;
+            box-shadow: 0 0 0 3px rgba(45, 90, 39, 0.1);
+        }
+
+        .input-group input:focus + label,
+        .input-group input:not(:placeholder-shown) + label {
+            top: 0;
+            left: 10px;
+            font-size: 0.8em;
+            color: #2d5a27;
+            font-weight: 600;
+        }
+
+        .input-group input.error {
+            border-color: #e74c3c;
+            box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.1);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #2d5a27 0%, #4a7c59 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #e6b800 0%, #d4a700 100%);
+            transition: left 0.3s ease;
+            z-index: 0;
+        }
+
+        .login-btn:hover::before {
+            left: 0;
+        }
+
+        .login-btn span {
+            position: relative;
+            z-index: 1;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(45, 90, 39, 0.3);
+        }
+
+        .login-btn:active {
+            transform: translateY(0);
+        }
+
+        .login-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .back-btn {
+            background: #f8f9fa;
+            color: #666;
+            border: 2px solid #e0e0e0;
+            margin-right: 10px;
+            width: auto;
+            padding: 18px 30px;
+            flex: none;
+        }
+
+        .back-btn:hover {
+            background: #e9ecef;
+            border-color: #adb5bd;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .button-group .login-btn {
+            flex: 1;
+            margin-bottom: 0;
+        }
+
+        .loading {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        .error-message {
+            background: #fee;
+            border: 1px solid #fcc;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 20px;
+            color: #c33;
+            font-size: 0.9em;
+            text-align: left;
+            display: none;
+        }
+
+        .success-message {
+            background: #efe;
+            border: 1px solid #cfc;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 20px;
+            color: #363;
+            font-size: 0.9em;
+            text-align: left;
+            display: none;
+        }
+
+        .otp-info {
+            background: #f8f9fa;
+            border-left: 4px solid #e6b800;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: left;
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .otp-info strong {
+            color: #2d5a27;
+        }
+
+        .security-badge {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 20px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            font-size: 0.85em;
+            color: #666;
+        }
+
+        .security-badge::before {
+            content: '🔒';
+            font-size: 1.2em;
+        }
+
+        @keyframes spin {
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 40px 30px;
+                margin: 10px;
+            }
+            
+            .logo {
+                font-size: 2em;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .back-btn {
+                margin-right: 0;
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="logo">🔒 BackupVault</div>
+        <p class="tagline">Secure your data with confidence</p>
+        
+        <!-- Step Indicator -->
+        <div class="step-indicator">
+            <div class="step active" id="step1">1</div>
+            <div class="step-line" id="line1"></div>
+            <div class="step" id="step2">2</div>
+        </div>
+        
+        <form class="login-form" id="loginForm">
+            <div class="error-message" id="errorMessage"></div>
+            <div class="success-message" id="successMessage"></div>
+            
+            <!-- Step 1: Login -->
+            <div class="form-step active" id="step1Form">
+                <div class="step-title">Sign In to Your Account</div>
+                <div class="step-description">Enter your credentials to access BackupVault</div>
+                
+                <div class="input-group">
+                    <input type="email" id="email" placeholder=" " required>
+                    <label for="email">Email Address</label>
+                </div>
+                
+                <div class="input-group">
+                    <input type="password" id="password" placeholder=" " required>
+                    <label for="password">Password</label>
+                </div>
+                
+                <button type="button" class="login-btn" id="loginBtn">
+                    <span>Sign In</span>
+                    <div class="loading" id="loading1"></div>
+                </button>
+            </div>
+            
+            <!-- Step 2: OTP Verification -->
+            <div class="form-step" id="step2Form">
+                <div class="step-title">Enter OTP Code</div>
+                <div class="step-description">We've sent a verification code to your email</div>
+                
+                <div class="otp-info">
+                    <strong>Check your inbox</strong> for the OTP code. It may take a few moments to arrive.
+                </div>
+                
+                <div class="input-group">
+                    <input type="text" id="otp" placeholder=" " maxlength="5" required>
+                    <label for="otp">5-Digit OTP Code</label>
+                </div>
+                
+                <div class="button-group">
+                    <button type="button" class="login-btn back-btn" id="backBtn">
+                        <span>← Back</span>
+                    </button>
+                    <button type="submit" class="login-btn" id="verifyBtn">
+                        <span>Verify & Sign In</span>
+                        <div class="loading" id="loading2"></div>
+                    </button>
+                </div>
+            </div>
+        </form>
+        
+        <div class="security-badge">
+            256-bit SSL encryption protects your data
+        </div>
+    </div>
+
+    <script>
+        // API Configuration
+        const API_CONFIG = {
+            LOGIN_URL: 'https://assetishaport.counterone.net/api/dev2/accounts/clients/login',
+            VERIFY_OTP_URL: 'https://assetishaport.counterone.net/api/dev2/accounts/verifyotp',
+            DASHBOARD_URL: 'dashboard.html'
+        };
+
+        // State management
+        let currentStep = 1;
+        let userEmail = '';
+
+        // DOM elements
+        const form = document.getElementById('loginForm');
+        const step1Form = document.getElementById('step1Form');
+        const step2Form = document.getElementById('step2Form');
+        const step1Indicator = document.getElementById('step1');
+        const step2Indicator = document.getElementById('step2');
+        const line1 = document.getElementById('line1');
+        
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        const otpInput = document.getElementById('otp');
+        
+        const loginBtn = document.getElementById('loginBtn');
+        const verifyBtn = document.getElementById('verifyBtn');
+        const backBtn = document.getElementById('backBtn');
+        
+        const loading1 = document.getElementById('loading1');
+        const loading2 = document.getElementById('loading2');
+        const errorMessage = document.getElementById('errorMessage');
+        const successMessage = document.getElementById('successMessage');
+
+        // Utility functions
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorMessage.style.display = 'block';
+            successMessage.style.display = 'none';
+        }
+
+        function showSuccess(message) {
+            successMessage.textContent = message;
+            successMessage.style.display = 'block';
+            errorMessage.style.display = 'none';
+        }
+
+        function hideMessages() {
+            errorMessage.style.display = 'none';
+            successMessage.style.display = 'none';
+            emailInput.classList.remove('error');
+            passwordInput.classList.remove('error');
+            otpInput.classList.remove('error');
+        }
+
+        function setLoadingState(button, loading, isLoading) {
+            if (isLoading) {
+                button.style.position = 'relative';
+                button.querySelector('span').style.opacity = '0';
+                loading.style.display = 'block';
+                button.disabled = true;
+            } else {
+                button.querySelector('span').style.opacity = '1';
+                loading.style.display = 'none';
+                button.disabled = false;
+            }
+        }
+
+        function goToStep(step) {
+            currentStep = step;
+            
+            if (step === 1) {
+                step1Form.classList.add('active');
+                step2Form.classList.remove('active');
+                step1Indicator.classList.add('active');
+                step2Indicator.classList.remove('active');
+                step1Indicator.classList.remove('completed');
+                line1.classList.remove('active');
+            } else {
+                step1Form.classList.remove('active');
+                step2Form.classList.add('active');
+                step1Indicator.classList.remove('active');
+                step1Indicator.classList.add('completed');
+                step2Indicator.classList.add('active');
+                line1.classList.add('active');
+            }
+            
+            hideMessages();
+        }
+
+        // API functions
+        async function makeApiCall(url, data) {
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                const responseData = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(responseData.message || responseData.error || 'Request failed');
+                }
+
+                return responseData;
+            } catch (error) {
+                console.error('API call failed:', error);
+                throw error;
+            }
+        }
+
+        function storeAuthData(data) {
+            // Store authentication tokens and user data
+            if (data.access_token || data.token) {
+                const token = data.access_token || data.token;
+                sessionStorage.setItem('access_token', token);
+            }
+            if (data.refresh_token) {
+                sessionStorage.setItem('refresh_token', data.refresh_token);
+            }
+            if (data.user) {
+                sessionStorage.setItem('user_data', JSON.stringify(data.user));
+            }
+        }
+
+        // Event listeners
+        // Login
+        loginBtn.addEventListener('click', async function() {
+            hideMessages();
+            
+            const email = emailInput.value.trim();
+            const password = passwordInput.value.trim();
+            
+            if (!email) {
+                showError('Please enter your email address');
+                emailInput.classList.add('error');
+                return;
+            }
+            
+            if (!password) {
+                showError('Please enter your password');
+                passwordInput.classList.add('error');
+                return;
+            }
+
+            // Email validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                showError('Please enter a valid email address');
+                emailInput.classList.add('error');
+                return;
+            }
+
+            setLoadingState(loginBtn, loading1, true);
+            
+            try {
+                const loginData = {
+                    phone: email, // API expects 'phone' field for email
+                    password: password
+                };
+
+                const response = await makeApiCall(API_CONFIG.LOGIN_URL, loginData);
+                
+                userEmail = email;
+                showSuccess('Login successful! Please check your email for the OTP code.');
+                
+                setTimeout(() => {
+                    goToStep(2);
+                    otpInput.focus();
+                }, 1500);
+                
+            } catch (error) {
+                console.error('Login failed:', error);
+                showError(error.message || 'Login failed. Please check your credentials.');
+                emailInput.classList.add('error');
+                passwordInput.classList.add('error');
+            } finally {
+                setLoadingState(loginBtn, loading1, false);
+            }
+        });
+
+        // Verify OTP
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            if (currentStep !== 2) return;
+            
+            hideMessages();
+            
+            const otp = otpInput.value.trim();
+            if (!otp) {
+                showError('Please enter the OTP code');
+                otpInput.classList.add('error');
+                return;
+            }
+            
+            if (otp.length !== 5) {
+                showError('OTP must be 5 digits');
+                otpInput.classList.add('error');
+                return;
+            }
+            
+            setLoadingState(verifyBtn, loading2, true);
+            
+            try {
+                const verifyData = {
+                    email: userEmail,
+                    otp: parseInt(otp) // API expects OTP as number
+                };
+
+                const response = await makeApiCall(API_CONFIG.VERIFY_OTP_URL, verifyData);
+                
+                storeAuthData(response);
+                
+                showSuccess('Verification successful! Redirecting to dashboard...');
+                
+                setTimeout(() => {
+                    window.location.href = API_CONFIG.DASHBOARD_URL;
+                }, 1500);
+                
+            } catch (error) {
+                console.error('Verify OTP failed:', error);
+                showError(error.message || 'Invalid OTP code. Please try again.');
+                otpInput.classList.add('error');
+            } finally {
+                setLoadingState(verifyBtn, loading2, false);
+            }
+        });
+
+        // Back button
+        backBtn.addEventListener('click', function() {
+            goToStep(1);
+        });
+
+        // Auto-format OTP input
+        otpInput.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length > 5) value = value.slice(0, 5);
+            e.target.value = value;
+        });
+
+        // Enter key handling
+        emailInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                passwordInput.focus();
+            }
+        });
+
+        passwordInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                loginBtn.click();
+            }
+        });
+
+        otpInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                verifyBtn.click();
+            }
+        });
+
+        // Check if user is already logged in
+        window.addEventListener('load', function() {
+            const accessToken = sessionStorage.getItem('access_token');
+            if (accessToken) {
+                window.location.href = API_CONFIG.DASHBOARD_URL;
+            }
+        });
+    </script>
+</body>
+</html>
