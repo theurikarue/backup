@@ -40,3 +40,10 @@
         };
     ```
 
+## UI DESIGNS
+### Login page 
+![Login-Page](assets/images/login-step-1.png)
+
+### Dashboard 
+
+![Dashboard-Page](assets/images/dashboard.png)
